@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package care_companion;
+option go_package = "github.com/homayoonalimohammadi/care-companion";
+
+service CareCompanion {
+    rpc GetCareSeeker(GetCareSeekerRequest) returns (GetCareSeekerResponse);
+    rpc CreateCareSeeker(CreateCareSeekerRequest) returns (CreateCareSeekerResponse);
+    rpc Ping(Empty) returns (PingResponse);
+}
+
+message Empty {}
+
+message PingResponse {
+    string message = 1;
+}
+
+message GetCareSeekerRequest {
+    string id = 1;
+}
+
+message GetCareSeekerResponse {
+    CareSeeker care_seeker = 1;
+}
+
+message CreateCareSeekerRequest {
+    string name = 1;
+}
+
+message CreateCareSeekerResponse {
+    CareSeeker care_seeker = 1;
+}
+
+message CareSeeker {
+    string id = 1;
+    string name = 2;
+}

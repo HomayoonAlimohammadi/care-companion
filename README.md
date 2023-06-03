@@ -1,1 +1,1 @@
-# care-companion
+# Care Companion
