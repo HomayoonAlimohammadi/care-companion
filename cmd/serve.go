@@ -9,8 +9,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
+	"github.com/homayoonalimohammadi/care-companion/autogen/care_companion"
 	"github.com/homayoonalimohammadi/care-companion/internal/app/core"
-	care_companion "github.com/homayoonalimohammadi/care-companion/proto"
+	"github.com/homayoonalimohammadi/care-companion/internal/app/providers"
 )
 
 var serveCmd = &cobra.Command{
@@ -32,7 +33,8 @@ func serve(cmd *cobra.Command, args []string) {
 	}
 
 	grpcServer := grpc.NewServer()
-	service := core.New()
+	careNeedProvider := getCareNeedProviderOrPanic(config.CareNeed)
+	service := core.New(careNeedProvider)
 	care_companion.RegisterCareCompanionServer(grpcServer, service)
 	reflection.Register(grpcServer)
 
@@ -48,4 +50,8 @@ func loadConfigOrPanic(cmd *cobra.Command) *Config {
 		panic("failed to load configurations")
 	}
 	return config
+}
+
+func getCareNeedProviderOrPanic(config CareNeed) providers.CareNeedProvider {
+	return nil
 }

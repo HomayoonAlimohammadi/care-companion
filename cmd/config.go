@@ -10,7 +10,15 @@ import (
 
 // Config the application's configuration structure
 type Config struct {
-	Port int
+	Port     int
+	CareNeed CareNeed
+}
+
+type CareNeed struct {
+	Postgres Postgres
+}
+
+type Postgres struct {
 }
 
 // LoadConfig loads the config from a file if specified, otherwise from the environment

@@ -6,15 +6,21 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	care_companion "github.com/homayoonalimohammadi/care-companion/proto"
+	"github.com/homayoonalimohammadi/care-companion/autogen/care_companion"
+	"github.com/homayoonalimohammadi/care-companion/internal/app/providers"
 )
 
 type serviceImplementation struct {
 	care_companion.UnimplementedCareCompanionServer
+	careNeedProvider providers.CareNeedProvider
 }
 
-func New() *serviceImplementation {
-	return &serviceImplementation{}
+func New(
+	careNeedProvider providers.CareNeedProvider,
+) *serviceImplementation {
+	return &serviceImplementation{
+		careNeedProvider: careNeedProvider,
+	}
 }
 
 func (s *serviceImplementation) GetCareSeeker(ctx context.Context,
@@ -24,6 +30,16 @@ func (s *serviceImplementation) GetCareSeeker(ctx context.Context,
 
 func (s *serviceImplementation) CreateCareSeeker(ctx context.Context,
 	request *care_companion.CreateCareSeekerRequest) (*care_companion.CreateCareSeekerResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "not implemented")
+}
+
+func (s *serviceImplementation) GetCareNeed(ctx context.Context,
+	request *care_companion.GetCareNeedRequest) (*care_companion.GetCareNeedResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "not implemented")
+}
+
+func (s *serviceImplementation) CreateCareNeed(ctx context.Context,
+	request *care_companion.CreateCareNeedRequest) (*care_companion.CreateCareNeedResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
 

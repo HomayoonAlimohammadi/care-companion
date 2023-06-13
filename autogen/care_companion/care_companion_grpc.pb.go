@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v4.22.2
-// source: proto/care_companion.proto
+// source: care_companion.proto
 
 package care_companion
 
@@ -24,6 +24,8 @@ const _ = grpc.SupportPackageIsVersion7
 type CareCompanionClient interface {
 	GetCareSeeker(ctx context.Context, in *GetCareSeekerRequest, opts ...grpc.CallOption) (*GetCareSeekerResponse, error)
 	CreateCareSeeker(ctx context.Context, in *CreateCareSeekerRequest, opts ...grpc.CallOption) (*CreateCareSeekerResponse, error)
+	GetCareNeed(ctx context.Context, in *GetCareNeedRequest, opts ...grpc.CallOption) (*GetCareNeedResponse, error)
+	CreateCareNeed(ctx context.Context, in *CreateCareNeedRequest, opts ...grpc.CallOption) (*CreateCareNeedResponse, error)
 	Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResponse, error)
 }
 
@@ -53,6 +55,24 @@ func (c *careCompanionClient) CreateCareSeeker(ctx context.Context, in *CreateCa
 	return out, nil
 }
 
+func (c *careCompanionClient) GetCareNeed(ctx context.Context, in *GetCareNeedRequest, opts ...grpc.CallOption) (*GetCareNeedResponse, error) {
+	out := new(GetCareNeedResponse)
+	err := c.cc.Invoke(ctx, "/care_companion.CareCompanion/GetCareNeed", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *careCompanionClient) CreateCareNeed(ctx context.Context, in *CreateCareNeedRequest, opts ...grpc.CallOption) (*CreateCareNeedResponse, error) {
+	out := new(CreateCareNeedResponse)
+	err := c.cc.Invoke(ctx, "/care_companion.CareCompanion/CreateCareNeed", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *careCompanionClient) Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResponse, error) {
 	out := new(PingResponse)
 	err := c.cc.Invoke(ctx, "/care_companion.CareCompanion/Ping", in, out, opts...)
@@ -68,6 +88,8 @@ func (c *careCompanionClient) Ping(ctx context.Context, in *Empty, opts ...grpc.
 type CareCompanionServer interface {
 	GetCareSeeker(context.Context, *GetCareSeekerRequest) (*GetCareSeekerResponse, error)
 	CreateCareSeeker(context.Context, *CreateCareSeekerRequest) (*CreateCareSeekerResponse, error)
+	GetCareNeed(context.Context, *GetCareNeedRequest) (*GetCareNeedResponse, error)
+	CreateCareNeed(context.Context, *CreateCareNeedRequest) (*CreateCareNeedResponse, error)
 	Ping(context.Context, *Empty) (*PingResponse, error)
 	mustEmbedUnimplementedCareCompanionServer()
 }
@@ -81,6 +103,12 @@ func (UnimplementedCareCompanionServer) GetCareSeeker(context.Context, *GetCareS
 }
 func (UnimplementedCareCompanionServer) CreateCareSeeker(context.Context, *CreateCareSeekerRequest) (*CreateCareSeekerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCareSeeker not implemented")
+}
+func (UnimplementedCareCompanionServer) GetCareNeed(context.Context, *GetCareNeedRequest) (*GetCareNeedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCareNeed not implemented")
+}
+func (UnimplementedCareCompanionServer) CreateCareNeed(context.Context, *CreateCareNeedRequest) (*CreateCareNeedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateCareNeed not implemented")
 }
 func (UnimplementedCareCompanionServer) Ping(context.Context, *Empty) (*PingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
@@ -134,6 +162,42 @@ func _CareCompanion_CreateCareSeeker_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CareCompanion_GetCareNeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCareNeedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CareCompanionServer).GetCareNeed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/care_companion.CareCompanion/GetCareNeed",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CareCompanionServer).GetCareNeed(ctx, req.(*GetCareNeedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CareCompanion_CreateCareNeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCareNeedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CareCompanionServer).CreateCareNeed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/care_companion.CareCompanion/CreateCareNeed",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CareCompanionServer).CreateCareNeed(ctx, req.(*CreateCareNeedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CareCompanion_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
@@ -168,10 +232,18 @@ var CareCompanion_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _CareCompanion_CreateCareSeeker_Handler,
 		},
 		{
+			MethodName: "GetCareNeed",
+			Handler:    _CareCompanion_GetCareNeed_Handler,
+		},
+		{
+			MethodName: "CreateCareNeed",
+			Handler:    _CareCompanion_CreateCareNeed_Handler,
+		},
+		{
 			MethodName: "Ping",
 			Handler:    _CareCompanion_Ping_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/care_companion.proto",
+	Metadata: "care_companion.proto",
 }
