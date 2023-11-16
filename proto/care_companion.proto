@@ -6,8 +6,8 @@ option go_package = "github.com/homayoonalimohammadi/care-companion";
 service CareCompanion {
     rpc GetCareSeeker(GetCareSeekerRequest) returns (GetCareSeekerResponse);
     rpc CreateCareSeeker(CreateCareSeekerRequest) returns (CreateCareSeekerResponse);
-    rpc GetCareNeed(GetCareNeedRequest) returns (GetCareNeedResponse);
-    rpc CreateCareNeed(CreateCareNeedRequest) returns (CreateCareNeedResponse);
+    rpc GetCareSeek(GetCareSeekRequest) returns (GetCareSeekResponse);
+    rpc CreateCareSeek(CreateCareSeekRequest) returns (CreateCareSeekResponse);
     rpc Ping(Empty) returns (PingResponse);
 }
 
@@ -18,7 +18,7 @@ message PingResponse {
 }
 
 message GetCareSeekerRequest {
-    string id = 1;
+    int64 id = 1;
 }
 
 message GetCareSeekerResponse {
@@ -33,23 +33,23 @@ message CreateCareSeekerResponse {
     CareSeeker care_seeker = 1;
 }
 
-message CreateCareNeedRequest {
-    CareNeed care_need = 1;
+message CreateCareSeekRequest {
+    CareSeek care_seek = 1;
 }
 
-message CreateCareNeedResponse {
-    CareNeed care_need = 1;
+message CreateCareSeekResponse {
+    CareSeek care_seek = 1;
 }
 
-message GetCareNeedRequest {
+message GetCareSeekRequest {
     oneof id {
-        string care_seeker_id = 1;
-        string care_need_id = 2;
+        int64 care_seeker_id = 1;
+        int64 care_seek_id = 2;
     }
 }
 
-message GetCareNeedResponse {
-    CareNeed care_need = 1;
+message GetCareSeekResponse {
+    CareSeek care_seek = 1;
 }
 
 message Location {
@@ -74,12 +74,12 @@ message Location {
 }
 
 message CareSeeker {
-    string id = 1;
+    int64 id = 1;
     string name = 2;
 }
 
-message CareNeed {
-    string id = 1;
+message CareSeek {
+    int64 id = 1;
     Location location = 2;
     double compensation = 3;
 }

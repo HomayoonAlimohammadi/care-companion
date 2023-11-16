@@ -11,6 +11,7 @@ import (
 
 	"github.com/homayoonalimohammadi/care-companion/autogen/care_companion"
 	"github.com/homayoonalimohammadi/care-companion/internal/app/core"
+	"github.com/homayoonalimohammadi/care-companion/internal/app/db/queries"
 	"github.com/homayoonalimohammadi/care-companion/internal/app/providers"
 )
 
@@ -24,7 +25,7 @@ func init() {
 	rootCmd.AddCommand(serveCmd)
 }
 
-func serve(cmd *cobra.Command, args []string) {
+func serve(cmd *cobra.Command, _ []string) {
 	config := loadConfigOrPanic(cmd)
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.Port))
@@ -33,8 +34,13 @@ func serve(cmd *cobra.Command, args []string) {
 	}
 
 	grpcServer := grpc.NewServer()
-	careNeedProvider := getCareNeedProviderOrPanic(config.CareNeed)
-	service := core.New(careNeedProvider)
+
+	querier := queries.New()
+
+	careSeekerProvider := providers.NewCareSeeker(querier)
+	careSeekProvider := providers.NewCareSeek(querier)
+
+	service := core.New(careSeekerProvider, careSeekProvider)
 	care_companion.RegisterCareCompanionServer(grpcServer, service)
 	reflection.Register(grpcServer)
 
@@ -50,8 +56,4 @@ func loadConfigOrPanic(cmd *cobra.Command) *Config {
 		panic("failed to load configurations")
 	}
 	return config
-}
-
-func getCareNeedProviderOrPanic(config CareNeed) providers.CareNeedProvider {
-	return nil
 }

@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"fmt"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -12,20 +13,36 @@ import (
 
 type serviceImplementation struct {
 	care_companion.UnimplementedCareCompanionServer
-	careNeedProvider providers.CareNeedProvider
+	careSeekerProvider providers.CareSeeker
+	careSeekProvider   providers.CareSeek
 }
 
 func New(
-	careNeedProvider providers.CareNeedProvider,
+	careSeekerProvider providers.CareSeeker,
+	careSeekProvider providers.CareSeek,
 ) *serviceImplementation {
 	return &serviceImplementation{
-		careNeedProvider: careNeedProvider,
+		careSeekerProvider: careSeekerProvider,
+		careSeekProvider:   careSeekProvider,
 	}
 }
 
 func (s *serviceImplementation) GetCareSeeker(ctx context.Context,
 	request *care_companion.GetCareSeekerRequest) (*care_companion.GetCareSeekerResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "not implemented")
+	seeker, err := s.careSeekerProvider.Get(request.GetId())
+	if err != nil {
+		return nil, status.Error(
+			codes.Internal,
+			fmt.Errorf("failed to get careSeeker: %w", err).Error(),
+		)
+	}
+
+	return &care_companion.GetCareSeekerResponse{
+		CareSeeker: &care_companion.CareSeeker{
+			Id:   seeker.ID,
+			Name: seeker.Name,
+		},
+	}, nil
 }
 
 func (s *serviceImplementation) CreateCareSeeker(ctx context.Context,
@@ -33,13 +50,13 @@ func (s *serviceImplementation) CreateCareSeeker(ctx context.Context,
 	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
 
-func (s *serviceImplementation) GetCareNeed(ctx context.Context,
-	request *care_companion.GetCareNeedRequest) (*care_companion.GetCareNeedResponse, error) {
+func (s *serviceImplementation) GetCareSeek(ctx context.Context,
+	request *care_companion.GetCareSeekRequest) (*care_companion.GetCareSeekResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
 
-func (s *serviceImplementation) CreateCareNeed(ctx context.Context,
-	request *care_companion.CreateCareNeedRequest) (*care_companion.CreateCareNeedResponse, error) {
+func (s *serviceImplementation) CreateCareSeek(ctx context.Context,
+	request *care_companion.CreateCareSeekRequest) (*care_companion.CreateCareSeekResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
 

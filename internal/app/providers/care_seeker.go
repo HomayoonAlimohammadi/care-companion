@@ -1,8 +1,22 @@
 package providers
 
-import "github.com/homayoonalimohammadi/care-companion/internal/app/db/models"
+import "github.com/homayoonalimohammadi/care-companion/internal/app/db/queries"
 
-type CareSeekerProvider interface {
-	Get(id string) (models.CareSeeker, error)
-	Create(models.CareSeeker) error
+type CareSeeker interface {
+	Get(id int64) (*queries.CareSeeker, error)
+	Create(*queries.CareSeeker) error
+}
+
+type CareSeekerProvider struct{}
+
+func (p *CareSeekerProvider) Get(id int64) (*queries.CareSeeker, error) {
+	return nil, nil
+}
+
+func (p *CareSeekerProvider) Create(cs *queries.CareSeeker) error {
+	return nil
+}
+
+func NewCareSeeker(querier queries.Querier) *CareSeekerProvider {
+	return &CareSeekerProvider{}
 }

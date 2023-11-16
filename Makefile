@@ -1,3 +1,5 @@
+.PHONY: deps carecompanion autogen 
+
 deps:
 	go mod download && go mod tidy
 

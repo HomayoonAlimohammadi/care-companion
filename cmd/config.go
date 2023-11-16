@@ -11,10 +11,10 @@ import (
 // Config the application's configuration structure
 type Config struct {
 	Port     int
-	CareNeed CareNeed
+	CareSeek CareSeek
 }
 
-type CareNeed struct {
+type CareSeek struct {
 	Postgres Postgres
 }
 
